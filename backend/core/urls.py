@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from apps.tickets.views import CategoryViewSet, TicketViewSet, CommentViewSet
-from apps.users.views import RegisterView, MeView, UserListView
+from apps.users.views import RegisterView, MeView, UserListView, ChangePasswordView
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet, basename='category')
@@ -28,6 +28,7 @@ urlpatterns = [
     # Users
     path('api/users/register/', RegisterView.as_view(), name='register'),
     path('api/users/me/', MeView.as_view(), name='me'),
+    path('api/users/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/users/', UserListView.as_view(), name='user-list'),
     # Main API
     path('api/', include(router.urls)),
