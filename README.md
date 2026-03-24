@@ -1,137 +1,225 @@
 # Desk AI – Sistema de Help Desk com Inteligência Artificial
 
-Plataforma de gerenciamento de tickets de suporte com integração ao **Google Gemini AI** para sugestões automáticas de respostas, categorização inteligente e resumos executivos.
+Sistema de gerenciamento de tickets de suporte com integração ao **Google Gemini AI**.
 
 ---
 
 ## Tecnologias
 
-| Camada    | Stack                                              |
-|-----------|----------------------------------------------------|
-| Backend   | Python 3.11+, Django 4.2, Django REST Framework    |
-| Auth      | JWT (SimpleJWT)                                    |
-| IA        | Google Gemini 1.5 Flash                            |
-| Frontend  | React 18, TypeScript, Vite, Tailwind CSS           |
-| Banco     | SQLite (dev) / PostgreSQL (prod)                   |
+| Camada   | Stack                                           |
+|----------|-------------------------------------------------|
+| Backend  | Python 3.11+, Django 4.2, Django REST Framework |
+| Auth     | JWT (SimpleJWT)                                 |
+| IA       | Google Gemini 1.5 Flash                         |
+| Frontend | React 18, TypeScript, Vite, Tailwind CSS        |
+| Banco    | SQLite (desenvolvimento)                        |
 
 ---
 
 ## Pré-requisitos
 
-- **Python 3.11+** – [python.org/downloads](https://www.python.org/downloads/)
-- **Node.js 18+** – [nodejs.org](https://nodejs.org/)
+Antes de começar, instale:
+
+- **Python 3.11+** → https://python.org/downloads  
+  ⚠️ Durante a instalação, marque a opção **"Add Python to PATH"**
+- **Node.js 18+** → https://nodejs.org
 
 ---
 
-## Como rodar
+## Como rodar (primeira vez)
 
-### 1. Backend
+Você vai precisar de **dois terminais abertos ao mesmo tempo**: um para o backend e outro para o frontend.
+
+---
+
+### Terminal 1 — Backend
+
+#### PowerShell
 
 ```powershell
-cd backend
+# Entrar na pasta do backend
+cd "c:\Users\Alvinho\Desktop\UNINASSAU\2026.1\CÓDIGOS DE ALTA PERFOMANCE WEB\desk-ai\backend"
 
-# Criar ambiente virtual
+# Criar o ambiente virtual
 python -m venv venv
-.\venv\Scripts\activate
 
-# Instalar dependências
+# Ativar o ambiente virtual
+.\venv\Scripts\Activate.ps1
+
+# Instalar as dependências
 pip install -r requirements.txt
 
-# Configurar variáveis de ambiente
-copy .env.example .env
-# Edite o .env e adicione sua GEMINI_API_KEY
+# Criar os arquivos de migração
+python manage.py makemigrations users
+python manage.py makemigrations tickets
 
-# Criar as tabelas
+# Criar as tabelas no banco de dados
 python manage.py migrate
 
-# Criar superusuário (admin)
+# Criar o usuário administrador
 python manage.py createsuperuser
 
-# Rodar o servidor
+# Iniciar o servidor
 python manage.py runserver
 ```
 
-O backend estará em: **http://localhost:8000**
-Admin Django: **http://localhost:8000/admin**
+#### Git Bash
 
-### 2. Frontend
+```bash
+# Entrar na pasta do backend
+cd "c:/Users/Alvinho/Desktop/UNINASSAU/2026.1/CÓDIGOS DE ALTA PERFOMANCE WEB/desk-ai/backend"
 
-```powershell
-cd frontend
+# Criar o ambiente virtual
+python -m venv venv
+
+# Ativar o ambiente virtual
+source venv/Scripts/activate
+
+# Instalar as dependências
+pip install -r requirements.txt
+
+# Criar os arquivos de migração
+python manage.py makemigrations users
+python manage.py makemigrations tickets
+
+# Criar as tabelas no banco de dados
+python manage.py migrate
+
+# Criar o usuário administrador
+python manage.py createsuperuser
+
+# Iniciar o servidor
+python manage.py runserver
+```
+
+O backend estará rodando em: **http://localhost:8000**
+
+---
+
+### Terminal 2 — Frontend
+
+#### PowerShell ou Git Bash (mesmo comando)
+
+```bash
+# Entrar na pasta do frontend
+cd "c:/Users/Alvinho/Desktop/UNINASSAU/2026.1/CÓDIGOS DE ALTA PERFOMANCE WEB/desk-ai/frontend"
+
+# Instalar as dependências
 npm install
+
+# Iniciar o servidor de desenvolvimento
 npm run dev
 ```
 
-O frontend estará em: **http://localhost:5173**
+O frontend estará rodando em: **http://localhost:5173**
 
 ---
 
-## Variáveis de ambiente (backend/.env)
+## Acessando o sistema
 
-| Variável        | Descrição                                    |
-|-----------------|----------------------------------------------|
-| `SECRET_KEY`    | Chave secreta do Django                      |
-| `DEBUG`         | `True` para desenvolvimento                  |
-| `GEMINI_API_KEY`| Chave da API do Google Gemini (opcional)     |
+Abra o navegador e acesse:
 
-Para obter uma chave do Gemini: [aistudio.google.com](https://aistudio.google.com/app/apikey)
+| O que acessar        | Endereço                       |
+|----------------------|--------------------------------|
+| Interface principal  | http://localhost:5173          |
+| Painel admin Django  | http://localhost:8000/admin    |
+
+> As duas partes precisam estar rodando ao mesmo tempo.
 
 ---
 
-## API Endpoints
+## Como rodar (depois da primeira vez)
 
-### Autenticação
-| Método | Endpoint                    | Descrição             |
-|--------|-----------------------------|-----------------------|
-| POST   | `/api/auth/token/`          | Login (JWT)           |
-| POST   | `/api/auth/token/refresh/`  | Renovar token         |
+Na segunda vez em diante, não precisa mais criar o venv, instalar dependências nem rodar migrações. Só ativar e subir os servidores.
 
-### Usuários
-| Método    | Endpoint                       | Descrição             |
-|-----------|--------------------------------|-----------------------|
-| POST      | `/api/users/register/`         | Cadastro              |
-| GET/PATCH | `/api/users/me/`               | Perfil do usuário     |
-| POST      | `/api/users/change-password/`  | Alterar senha         |
-| GET       | `/api/users/`                  | Listar usuários       |
+#### PowerShell
 
-### Tickets
-| Método | Endpoint                            | Descrição                     |
-|--------|-------------------------------------|-------------------------------|
-| GET    | `/api/tickets/`                     | Listar tickets                |
-| POST   | `/api/tickets/`                     | Criar ticket                  |
-| GET    | `/api/tickets/{id}/`                | Detalhar ticket               |
-| PATCH  | `/api/tickets/{id}/`                | Atualizar ticket              |
-| POST   | `/api/tickets/{id}/ai_suggest/`     | Gerar sugestão IA             |
-| GET    | `/api/tickets/{id}/summarize/`      | Resumo executivo IA           |
-| POST   | `/api/tickets/auto_categorize/`     | Categorização automática IA   |
-| POST   | `/api/tickets/{id}/attach/`         | Anexar arquivo                |
-| GET    | `/api/tickets/{id}/comments/`       | Listar comentários            |
-| POST   | `/api/tickets/{id}/comments/`       | Adicionar comentário          |
+```powershell
+# Terminal 1 — Backend
+cd "...desk-ai\backend"
+.\venv\Scripts\Activate.ps1
+python manage.py runserver
 
-### Categorias
-| Método | Endpoint               | Descrição              |
-|--------|------------------------|------------------------|
-| GET    | `/api/categories/`     | Listar categorias      |
-| POST   | `/api/categories/`     | Criar categoria        |
-| PATCH  | `/api/categories/{id}/`| Editar categoria       |
-| DELETE | `/api/categories/{id}/`| Remover categoria      |
+# Terminal 2 — Frontend
+cd "...desk-ai\frontend"
+npm run dev
+```
+
+#### Git Bash
+
+```bash
+# Terminal 1 — Backend
+cd ".../desk-ai/backend"
+source venv/Scripts/activate
+python manage.py runserver
+
+# Terminal 2 — Frontend
+cd ".../desk-ai/frontend"
+npm run dev
+```
+
+---
+
+## Variáveis de ambiente
+
+### Backend (`backend/.env`)
+
+```env
+SECRET_KEY=django-insecure-dev-key-mude-isso-em-producao
+DEBUG=True
+GEMINI_API_KEY=           # opcional — obtenha em aistudio.google.com/app/apikey
+```
+
+### Frontend (`frontend/.env`)
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+---
+
+## Ordem correta dos comandos (resumo)
+
+> ⚠️ Errar a ordem causa problemas no banco de dados.
+
+```
+1. makemigrations users
+2. makemigrations tickets
+3. migrate
+4. createsuperuser
+5. runserver
+```
+
+Se o banco travar ou apresentar erro de migração inconsistente, apague o arquivo `db.sqlite3` e repita a sequência do passo 1.
+
+#### PowerShell
+```powershell
+Remove-Item db.sqlite3
+```
+
+#### Git Bash
+```bash
+rm db.sqlite3
+```
 
 ---
 
 ## Perfis de usuário
 
-| Perfil  | Permissões                                                          |
-|---------|---------------------------------------------------------------------|
-| `admin` | Acesso total, gerencia usuários e categorias                       |
-| `agent` | Gerencia tickets, atribui status, cria notas internas, usa IA      |
-| `client`| Cria e acompanha seus próprios tickets                             |
+| Perfil   | Permissões                                                    |
+|----------|---------------------------------------------------------------|
+| `admin`  | Acesso total, gerencia usuários e categorias                  |
+| `agent`  | Gerencia tickets, adiciona notas internas, usa a IA           |
+| `client` | Cria e acompanha apenas os próprios tickets                   |
 
 ---
 
-## Funcionalidades de IA (Gemini)
+## Funcionalidades de IA (Google Gemini)
 
-- **Sugestão de resposta**: ao criar um ticket ou manualmente, gera uma resposta profissional
-- **Categorização automática**: sugere a melhor categoria com base no título e descrição
-- **Resumo executivo**: resume todo o histórico do ticket em 5 linhas
+As funcionalidades de IA são **opcionais**. Sem a `GEMINI_API_KEY` o sistema funciona normalmente, apenas sem os recursos de IA.
 
-> A IA é opcional. Sem `GEMINI_API_KEY`, o sistema funciona normalmente sem as funcionalidades de IA.
+| Funcionalidade           | Descrição                                              |
+|--------------------------|--------------------------------------------------------|
+| Sugestão de resposta     | Gera uma resposta profissional ao abrir um ticket      |
+| Categorização automática | Sugere a categoria ideal com base no título e descrição|
+| Resumo executivo         | Resume todo o histórico do ticket em até 5 linhas      |
