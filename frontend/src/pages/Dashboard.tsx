@@ -154,11 +154,11 @@ export function Dashboard() {
 
       {/* Recent tickets */}
       <div className="card overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900 text-base">Tickets recentes</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 className="font-semibold text-gray-900 text-base dark:text-white">Tickets recentes</h2>
           <Link
             to="/tickets"
-            className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+            className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium dark:text-primary-400 dark:hover:text-primary-300"
           >
             Ver todos
             <ArrowRight size={14} />
@@ -166,32 +166,32 @@ export function Dashboard() {
         </div>
 
         {recent.length === 0 ? (
-          <div className="py-16 flex flex-col items-center text-gray-400">
+          <div className="py-16 flex flex-col items-center text-gray-400 dark:text-gray-500">
             <Inbox size={40} className="mb-3 opacity-40" />
-            <p className="font-medium text-gray-500">Nenhum ticket ainda</p>
-            <p className="text-sm mt-1">Crie seu primeiro ticket para começar</p>
+            <p className="font-medium text-gray-500 dark:text-gray-400">Nenhum ticket ainda</p>
+            <p className="text-sm mt-1 dark:text-gray-500">Crie seu primeiro ticket para começar</p>
             <Link to="/tickets/new" className="btn-primary mt-4 text-sm">
               <PlusCircle size={15} />
               Criar ticket
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-gray-50 dark:divide-gray-800">
             {recent.map((ticket) => (
               <Link
                 key={ticket.id}
                 to={`/tickets/${ticket.id}`}
-                className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors group"
+                className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors group dark:hover:bg-gray-800/60"
               >
-                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 text-xs font-bold">
+                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 text-xs font-bold dark:bg-primary-900/35 dark:text-primary-300">
                   #{ticket.id}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-primary-600 transition-colors">
+                  <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-primary-600 transition-colors dark:text-gray-100 dark:group-hover:text-primary-400">
                     {ticket.title}
                   </p>
-                  <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-400 dark:text-gray-500">
                     <span>{ticket.category?.name ?? 'Sem categoria'}</span>
                     <span>·</span>
                     <span>

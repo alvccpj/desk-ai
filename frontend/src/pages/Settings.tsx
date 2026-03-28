@@ -72,11 +72,11 @@ export function Settings() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Configurações</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Configurações</h1>
 
       {/* Profile */}
       <div className="card p-6 mb-6">
-        <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <User size={18} />
           Perfil
         </h2>
@@ -89,9 +89,9 @@ export function Settings() {
             </label>
           </div>
           <div>
-            <p className="font-medium text-gray-900">{user.name}</p>
-            <p className="text-sm text-gray-500">{user.email}</p>
-            <span className="badge bg-primary-100 text-primary-700 mt-1 capitalize">{user.role}</span>
+            <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+            <span className="badge bg-primary-100 text-primary-700 mt-1 capitalize dark:bg-primary-900/40 dark:text-primary-300">{user.role}</span>
           </div>
         </div>
 
@@ -130,7 +130,7 @@ export function Settings() {
 
       {/* Password */}
       <div className="card p-6">
-        <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <Lock size={18} />
           Alterar senha
         </h2>

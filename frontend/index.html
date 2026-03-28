@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Desk AI – Suporte Inteligente</title>
     <meta name="description" content="Sistema de help desk com inteligência artificial" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('desk-ai-theme')
+          if (t === 'dark') document.documentElement.classList.add('dark')
+          else document.documentElement.classList.remove('dark')
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

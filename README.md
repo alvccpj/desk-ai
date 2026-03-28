@@ -95,4 +95,4 @@ desk-ai/
 
 ---
 
-Obrigado por dar uma olhada no projeto. Se algo não ficar claro ou você quiser sugerir melhorias, fique à vontade para abrir uma issue ou contribuir — bom estudo e bom código.
+Obrigado por dar uma olhada no projeto. Se algo não ficar claro ou você quiser sugerir melhorias, fique à vontade para abrir uma issue ou contribuir.

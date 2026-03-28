@@ -67,15 +67,15 @@ export function CreateTicket() {
     <div className="p-6 max-w-2xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="btn-ghost mb-4 -ml-2 text-gray-500"
+        className="btn-ghost mb-4 -ml-2 text-gray-500 dark:text-gray-400"
       >
         <ArrowLeft size={16} />
         Voltar
       </button>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Novo Ticket</h1>
-        <p className="text-gray-500 text-sm mt-0.5">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Novo Ticket</h1>
+        <p className="text-gray-500 text-sm mt-0.5 dark:text-gray-400">
           Descreva seu problema e a IA irá sugerir uma solução
         </p>
       </div>
@@ -143,7 +143,7 @@ export function CreateTicket() {
                   {categorizing ? <Spinner className="w-4 h-4" /> : <Wand2 size={16} />}
                 </button>
               </div>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">
                 Clique em <Wand2 size={10} className="inline" /> para sugerir via IA
               </p>
             </div>

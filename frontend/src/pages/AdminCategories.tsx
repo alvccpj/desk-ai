@@ -42,7 +42,7 @@ function CategoryForm({
           <div className="flex gap-2">
             <input
               type="color"
-              className="h-[38px] w-12 rounded border border-gray-300 cursor-pointer p-0.5"
+              className="h-[38px] w-12 rounded border border-gray-300 cursor-pointer p-0.5 dark:border-gray-600"
               value={form.color}
               onChange={set('color')}
             />
@@ -118,8 +118,8 @@ export function AdminCategories() {
     <div className="p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Categorias</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Gerencie as categorias de tickets</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Categorias</h1>
+          <p className="text-gray-500 text-sm mt-0.5 dark:text-gray-400">Gerencie as categorias de tickets</p>
         </div>
         <button className="btn-primary" onClick={() => setShowForm(true)}>
           <Plus size={16} />
@@ -129,7 +129,7 @@ export function AdminCategories() {
 
       {showForm && (
         <div className="card p-5 mb-4">
-          <h3 className="font-semibold text-gray-900 mb-4">Nova categoria</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Nova categoria</h3>
           <CategoryForm
             onSubmit={(d) => createMutation.mutate(d)}
             onCancel={() => setShowForm(false)}
@@ -138,13 +138,13 @@ export function AdminCategories() {
         </div>
       )}
 
-      <div className="card divide-y divide-gray-100 overflow-hidden">
+      <div className="card divide-y divide-gray-100 overflow-hidden dark:divide-gray-800">
         {isLoading ? (
           <div className="flex items-center justify-center h-32">
             <Spinner className="w-6 h-6 text-primary-600" />
           </div>
         ) : categories.length === 0 ? (
-          <div className="p-8 text-center text-gray-400">
+          <div className="p-8 text-center text-gray-400 dark:text-gray-500">
             <Tag size={32} className="mx-auto mb-2 opacity-40" />
             <p>Nenhuma categoria cadastrada.</p>
           </div>
@@ -161,18 +161,18 @@ export function AdminCategories() {
                   />
                 </div>
               ) : (
-                <div className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50">
+                <div className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                   <div
                     className="w-3 h-3 rounded-full flex-shrink-0"
                     style={{ backgroundColor: cat.color }}
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900">{cat.name}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{cat.name}</p>
                     {cat.description && (
-                      <p className="text-sm text-gray-500 truncate">{cat.description}</p>
+                      <p className="text-sm text-gray-500 truncate dark:text-gray-400">{cat.description}</p>
                     )}
                   </div>
-                  <span className="text-xs text-gray-400">{cat.ticket_count} ticket{cat.ticket_count !== 1 ? 's' : ''}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">{cat.ticket_count} ticket{cat.ticket_count !== 1 ? 's' : ''}</span>
                   <div className="flex gap-1">
                     <button
                       className="btn-ghost p-2 text-gray-400 hover:text-primary-600"

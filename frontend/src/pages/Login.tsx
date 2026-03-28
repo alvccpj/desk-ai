@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Bot, Ticket, Zap, ShieldCheck, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { Spinner } from '../components/Spinner'
+import { ThemeToggle } from '../components/ThemeToggle'
 import toast from 'react-hot-toast'
 
 const features = [
@@ -80,7 +81,10 @@ export function Login() {
       </div>
 
       {/* Right panel — form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+      <div className="relative w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 dark:bg-gray-950">
+        <div className="absolute top-4 right-4 z-10">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-md">
 
           {/* Mobile logo */}
@@ -88,12 +92,12 @@ export function Login() {
             <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
               <Bot size={22} className="text-white" />
             </div>
-            <span className="text-gray-900 text-xl font-bold">Desk AI</span>
+            <span className="text-gray-900 text-xl font-bold dark:text-white">Desk AI</span>
           </div>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Bem-vindo de volta</h1>
-            <p className="text-gray-500 text-sm mt-1">Entre com suas credenciais para continuar</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Seja Bem-vindo!</h1>
+            <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Entre com suas credenciais para continuar</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -124,7 +128,7 @@ export function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors dark:hover:text-gray-300"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -141,9 +145,9 @@ export function Login() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-500 mt-6 dark:text-gray-400">
             Não tem conta?{' '}
-            <Link to="/register" className="text-primary-600 font-semibold hover:underline">
+            <Link to="/register" className="text-primary-600 font-semibold hover:underline dark:text-primary-400">
               Cadastre-se grátis
             </Link>
           </p>

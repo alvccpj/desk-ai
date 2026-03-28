@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { Avatar } from './Avatar'
+import { ThemeToggle } from './ThemeToggle'
 
 interface NavItem {
   to: string
@@ -35,13 +36,16 @@ export function Sidebar() {
   )
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen sticky top-0">
-      <div className="p-5 border-b border-gray-200">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-            <Bot size={18} className="text-white" />
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen sticky top-0 dark:bg-gray-900 dark:border-gray-700">
+      <div className="p-5 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center shrink-0">
+              <Bot size={18} className="text-white" />
+            </div>
+            <span className="font-bold text-gray-900 text-lg dark:text-white truncate">Desk AI</span>
           </div>
-          <span className="font-bold text-gray-900 text-lg">Desk AI</span>
+          <ThemeToggle className="shrink-0" />
         </div>
       </div>
 
@@ -53,8 +57,8 @@ export function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 isActive
-                  ? 'bg-primary-50 text-primary-700'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/35 dark:text-primary-300'
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'
               }`
             }
           >
@@ -64,12 +68,14 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="p-3 border-t border-gray-200 space-y-1">
+      <div className="p-3 border-t border-gray-200 space-y-1 dark:border-gray-700">
         <NavLink
           to="/settings"
           className={({ isActive }) =>
             `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isActive ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100'
+              isActive
+                ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/35 dark:text-primary-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
             }`
           }
         >
@@ -78,7 +84,7 @@ export function Sidebar() {
         </NavLink>
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors dark:text-gray-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
         >
           <LogOut size={18} />
           Sair
@@ -86,12 +92,12 @@ export function Sidebar() {
       </div>
 
       {user && (
-        <div className="p-4 border-t border-gray-200 bg-gray-50">
+        <div className="p-4 border-t border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-950/50">
           <div className="flex items-center gap-3">
             <Avatar name={user.name} src={user.avatar} size="sm" />
             <div className="min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
-              <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+              <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-100">{user.name}</p>
+              <p className="text-xs text-gray-500 capitalize dark:text-gray-400">{user.role}</p>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider, useTheme } from './contexts/ThemeContext'
 import { Layout } from './components/Layout'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
@@ -22,38 +23,50 @@ const queryClient = new QueryClient({
   },
 })
 
+function AppToaster() {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
+  return (
+    <Toaster
+      position="top-right"
+      toastOptions={{
+        duration: 4000,
+        style: {
+          borderRadius: '10px',
+          boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.45)' : '0 4px 12px rgba(0,0,0,0.1)',
+          background: isDark ? '#1f2937' : '#fff',
+          color: isDark ? '#f3f4f6' : '#111827',
+        },
+      }}
+    />
+  )
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route element={<Layout />}>
-              <Route index element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/tickets" element={<TicketList />} />
-              <Route path="/tickets/new" element={<CreateTicket />} />
-              <Route path="/tickets/:id" element={<TicketDetail />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/admin/categories" element={<AdminCategories />} />
-              <Route path="/admin/users" element={<AdminUsers />} />
-            </Route>
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </BrowserRouter>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              borderRadius: '10px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            },
-          }}
-        />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route element={<Layout />}>
+                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/tickets" element={<TicketList />} />
+                <Route path="/tickets/new" element={<CreateTicket />} />
+                <Route path="/tickets/:id" element={<TicketDetail />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/admin/categories" element={<AdminCategories />} />
+                <Route path="/admin/users" element={<AdminUsers />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </BrowserRouter>
+          <AppToaster />
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }

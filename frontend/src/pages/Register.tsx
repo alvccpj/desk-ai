@@ -4,6 +4,7 @@ import { Bot, Eye, EyeOff } from 'lucide-react'
 import { authApi } from '../api/auth'
 import { useAuth } from '../contexts/AuthContext'
 import { Spinner } from '../components/Spinner'
+import { ThemeToggle } from '../components/ThemeToggle'
 import toast from 'react-hot-toast'
 
 export function Register() {
@@ -64,7 +65,10 @@ export function Register() {
       </div>
 
       {/* Right panel — form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 overflow-y-auto">
+      <div className="relative w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 overflow-y-auto dark:bg-gray-950">
+        <div className="absolute top-4 right-4 z-10">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-md py-8">
 
           {/* Mobile logo */}
@@ -72,12 +76,12 @@ export function Register() {
             <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
               <Bot size={22} className="text-white" />
             </div>
-            <span className="text-gray-900 text-xl font-bold">Desk AI</span>
+            <span className="text-gray-900 text-xl font-bold dark:text-white">Desk AI</span>
           </div>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Criar conta</h1>
-            <p className="text-gray-500 text-sm mt-1">Preencha os dados abaixo para se cadastrar</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Criar conta</h1>
+            <p className="text-gray-500 text-sm mt-1 dark:text-gray-400">Preencha os dados abaixo para se cadastrar</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -109,7 +113,7 @@ export function Register() {
             <div>
               <label className="label">
                 Departamento
-                <span className="text-gray-400 font-normal ml-1">(opcional)</span>
+                <span className="text-gray-400 font-normal ml-1 dark:text-gray-500">(opcional)</span>
               </label>
               <input
                 type="text"
@@ -134,7 +138,7 @@ export function Register() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors dark:hover:text-gray-300"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -163,9 +167,9 @@ export function Register() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-500 mt-6 dark:text-gray-400">
             Já tem conta?{' '}
-            <Link to="/login" className="text-primary-600 font-semibold hover:underline">
+            <Link to="/login" className="text-primary-600 font-semibold hover:underline dark:text-primary-400">
               Entrar
             </Link>
           </p>

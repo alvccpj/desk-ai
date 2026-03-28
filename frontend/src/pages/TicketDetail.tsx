@@ -115,7 +115,7 @@ export function TicketDetail() {
 
   if (!ticket) {
     return (
-      <div className="p-6 text-center text-gray-500">
+      <div className="p-6 text-center text-gray-500 dark:text-gray-400">
         Ticket não encontrado.
         <button onClick={() => navigate('/tickets')} className="btn-secondary mt-4">
           Voltar para tickets
@@ -126,7 +126,7 @@ export function TicketDetail() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      <button onClick={() => navigate(-1)} className="btn-ghost mb-4 -ml-2 text-gray-500">
+      <button onClick={() => navigate(-1)} className="btn-ghost mb-4 -ml-2 text-gray-500 dark:text-gray-400">
         <ArrowLeft size={16} />
         Voltar
       </button>
@@ -139,12 +139,12 @@ export function TicketDetail() {
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs text-gray-400">#{ticket.id}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">#{ticket.id}</span>
                   <StatusBadge status={ticket.status} />
                   <PriorityBadge priority={ticket.priority} />
                 </div>
-                <h1 className="text-xl font-bold text-gray-900">{ticket.title}</h1>
-                <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">{ticket.title}</h1>
+                <div className="flex items-center gap-2 mt-2 text-xs text-gray-400 dark:text-gray-500">
                   <span>Criado por {ticket.created_by.name}</span>
                   <span>·</span>
                   <span>
@@ -156,22 +156,22 @@ export function TicketDetail() {
                 </div>
               </div>
             </div>
-            <div className="mt-4 prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap bg-gray-50 rounded-lg p-4">
+            <div className="mt-4 prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap bg-gray-50 rounded-lg p-4 dark:bg-gray-800/60 dark:text-gray-200">
               {ticket.description}
             </div>
           </div>
 
           {/* AI Suggestion */}
           {(ticket.ai_suggestion || isAgent) && (
-            <div className="card p-5 border-primary-200 bg-primary-50/30">
+            <div className="card p-5 border-primary-200 bg-primary-50/30 dark:border-primary-800 dark:bg-primary-900/20">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-primary-800 flex items-center gap-2">
-                  <Bot size={16} className="text-primary-600" />
+                <h3 className="font-semibold text-primary-800 flex items-center gap-2 dark:text-primary-200">
+                  <Bot size={16} className="text-primary-600 dark:text-primary-400" />
                   Sugestão da IA
                 </h3>
                 {isAgent && (
                   <button
-                    className="btn-ghost text-primary-600 text-xs py-1 px-2"
+                    className="btn-ghost text-primary-600 text-xs py-1 px-2 dark:text-primary-400"
                     onClick={handleAISuggest}
                     disabled={loadingAI}
                   >
@@ -181,9 +181,9 @@ export function TicketDetail() {
                 )}
               </div>
               {ticket.ai_suggestion ? (
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{ticket.ai_suggestion}</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap dark:text-gray-200">{ticket.ai_suggestion}</p>
               ) : (
-                <p className="text-sm text-gray-400 italic">
+                <p className="text-sm text-gray-400 italic dark:text-gray-500">
                   Clique em "Gerar nova" para obter uma sugestão da IA.
                 </p>
               )}
@@ -194,8 +194,8 @@ export function TicketDetail() {
           {(summary || isAgent) && (
             <div className="card p-5">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                  <Sparkles size={16} className="text-yellow-500" />
+                <h3 className="font-semibold text-gray-900 flex items-center gap-2 dark:text-white">
+                  <Sparkles size={16} className="text-yellow-500 dark:text-yellow-400" />
                   Resumo executivo
                 </h3>
                 {isAgent && !summary && (
@@ -208,14 +208,14 @@ export function TicketDetail() {
                   </button>
                 )}
               </div>
-              {summary && <p className="text-sm text-gray-700 whitespace-pre-wrap">{summary}</p>}
+              {summary && <p className="text-sm text-gray-700 whitespace-pre-wrap dark:text-gray-200">{summary}</p>}
             </div>
           )}
 
           {/* Attachments */}
           {ticket.attachments.length > 0 && (
             <div className="card p-5">
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2 dark:text-white">
                 <Paperclip size={16} />
                 Anexos ({ticket.attachments.length})
               </h3>
@@ -226,7 +226,7 @@ export function TicketDetail() {
                     href={att.file}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 text-sm text-primary-600 hover:underline"
+                    className="flex items-center gap-2 text-sm text-primary-600 hover:underline dark:text-primary-400"
                   >
                     <Paperclip size={14} />
                     {att.filename}
@@ -238,37 +238,37 @@ export function TicketDetail() {
 
           {/* Comments */}
           <div className="card">
-            <div className="p-5 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-900">
+            <div className="p-5 border-b border-gray-100 dark:border-gray-800">
+              <h3 className="font-semibold text-gray-900 dark:text-white">
                 Comentários ({ticket.comments.length})
               </h3>
             </div>
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-gray-100 dark:divide-gray-800">
               {ticket.comments.map((c) => (
                 <div
                   key={c.id}
-                  className={`p-5 ${c.is_internal ? 'bg-amber-50' : ''}`}
+                  className={`p-5 ${c.is_internal ? 'bg-amber-50 dark:bg-amber-950/30' : ''}`}
                 >
                   <div className="flex items-start gap-3">
                     <Avatar name={c.author.name} src={c.author.avatar} size="sm" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-medium text-gray-900">{c.author.name}</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">{c.author.name}</span>
                         {c.is_internal && (
-                          <span className="badge bg-amber-100 text-amber-700 flex items-center gap-1">
+                          <span className="badge bg-amber-100 text-amber-700 flex items-center gap-1 dark:bg-amber-950/50 dark:text-amber-200">
                             <Lock size={10} />
                             Nota interna
                           </span>
                         )}
-                        <span className="text-xs text-gray-400 ml-auto">
+                        <span className="text-xs text-gray-400 ml-auto dark:text-gray-500">
                           {format(new Date(c.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-700 whitespace-pre-wrap">{c.content}</p>
+                      <p className="text-sm text-gray-700 whitespace-pre-wrap dark:text-gray-200">{c.content}</p>
                     </div>
                     {(user?.id === c.author.id || user?.role === 'admin') && (
                       <button
-                        className="text-gray-300 hover:text-red-500 transition-colors p-1"
+                        className="text-gray-300 hover:text-red-500 transition-colors p-1 dark:text-gray-600 dark:hover:text-red-400"
                         onClick={() => deleteComment.mutate(c.id)}
                       >
                         <Trash2 size={14} />
@@ -278,14 +278,14 @@ export function TicketDetail() {
                 </div>
               ))}
               {!ticket.comments.length && (
-                <p className="p-6 text-center text-gray-400 text-sm">
+                <p className="p-6 text-center text-gray-400 text-sm dark:text-gray-500">
                   Nenhum comentário ainda. Seja o primeiro a responder!
                 </p>
               )}
             </div>
 
             {/* Comment form */}
-            <div className="p-5 border-t border-gray-100 bg-gray-50/50">
+            <div className="p-5 border-t border-gray-100 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-800/30">
               <textarea
                 className="input resize-none mb-3"
                 placeholder={isInternal ? 'Nota interna (visível apenas para agentes)...' : 'Escreva um comentário...'}
@@ -296,7 +296,7 @@ export function TicketDetail() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {isAgent && (
-                    <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none">
+                    <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer select-none dark:text-gray-300">
                       <input
                         type="checkbox"
                         checked={isInternal}
@@ -329,7 +329,7 @@ export function TicketDetail() {
         {/* Sidebar */}
         <div className="space-y-4">
           <div className="card p-5 space-y-4">
-            <h3 className="font-semibold text-gray-900">Detalhes</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Detalhes</h3>
 
             <div>
               <label className="label text-xs">Status</label>
@@ -402,19 +402,19 @@ export function TicketDetail() {
               </div>
             )}
 
-            <hr className="border-gray-100" />
+            <hr className="border-gray-100 dark:border-gray-800" />
 
-            <div className="text-xs text-gray-400 space-y-1">
+            <div className="text-xs text-gray-400 space-y-1 dark:text-gray-500">
               <p>
-                <span className="font-medium text-gray-600">Criado por: </span>
+                <span className="font-medium text-gray-600 dark:text-gray-400">Criado por: </span>
                 {ticket.created_by.name}
               </p>
               <p>
-                <span className="font-medium text-gray-600">Criado em: </span>
+                <span className="font-medium text-gray-600 dark:text-gray-400">Criado em: </span>
                 {format(new Date(ticket.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
               </p>
               <p>
-                <span className="font-medium text-gray-600">Atualizado: </span>
+                <span className="font-medium text-gray-600 dark:text-gray-400">Atualizado: </span>
                 {formatDistanceToNow(new Date(ticket.updated_at), { locale: ptBR, addSuffix: true })}
               </p>
             </div>

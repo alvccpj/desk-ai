@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  // `selector` usa &:where(.dark, .dark *) — mais previsível no Tailwind 3.4+ que `class` com &:is(.dark *)
+  darkMode: 'selector',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {

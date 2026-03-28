@@ -59,8 +59,8 @@ export function TicketList() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Tickets</h1>
-          <p className="text-gray-500 text-sm mt-0.5">{total} ticket{total !== 1 ? 's' : ''} encontrado{total !== 1 ? 's' : ''}</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Tickets</h1>
+          <p className="text-gray-500 text-sm mt-0.5 dark:text-gray-400">{total} ticket{total !== 1 ? 's' : ''} encontrado{total !== 1 ? 's' : ''}</p>
         </div>
         <Link to="/tickets/new" className="btn-primary">
           <PlusCircle size={16} />
@@ -72,7 +72,7 @@ export function TicketList() {
         <div className="flex flex-wrap gap-3">
           <form onSubmit={handleSearch} className="flex flex-1 min-w-[200px] gap-2">
             <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 className="input pl-9"
@@ -127,28 +127,28 @@ export function TicketList() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50 border-b border-gray-200">
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">#</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Título</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Categoria</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Prioridade</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Responsável</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Atualizado</th>
+                  <tr className="bg-gray-50 border-b border-gray-200 dark:bg-gray-800/50 dark:border-gray-700">
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">#</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Título</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Categoria</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Status</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Prioridade</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Responsável</th>
+                    <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Atualizado</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                   {tickets.map((ticket) => (
-                    <tr key={ticket.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-4 py-3 text-gray-400">{ticket.id}</td>
+                    <tr key={ticket.id} className="hover:bg-gray-50 transition-colors dark:hover:bg-gray-800/50">
+                      <td className="px-4 py-3 text-gray-400 dark:text-gray-500">{ticket.id}</td>
                       <td className="px-4 py-3">
                         <Link
                           to={`/tickets/${ticket.id}`}
-                          className="font-medium text-gray-900 hover:text-primary-600 transition-colors"
+                          className="font-medium text-gray-900 hover:text-primary-600 transition-colors dark:text-gray-100 dark:hover:text-primary-400"
                         >
                           {ticket.title}
                         </Link>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
                           {ticket.comment_count} comentário{ticket.comment_count !== 1 ? 's' : ''}
                         </p>
                       </td>
@@ -161,7 +161,7 @@ export function TicketList() {
                             {ticket.category.name}
                           </span>
                         ) : (
-                          <span className="text-gray-400">—</span>
+                          <span className="text-gray-400 dark:text-gray-500">—</span>
                         )}
                       </td>
                       <td className="px-4 py-3"><StatusBadge status={ticket.status} /></td>
@@ -170,20 +170,20 @@ export function TicketList() {
                         {ticket.assigned_to ? (
                           <div className="flex items-center gap-2">
                             <Avatar name={ticket.assigned_to.name} src={ticket.assigned_to.avatar} size="sm" />
-                            <span className="text-gray-600">{ticket.assigned_to.name.split(' ')[0]}</span>
+                            <span className="text-gray-600 dark:text-gray-300">{ticket.assigned_to.name.split(' ')[0]}</span>
                           </div>
                         ) : (
-                          <span className="text-gray-400">—</span>
+                          <span className="text-gray-400 dark:text-gray-500">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-gray-400 text-xs">
+                      <td className="px-4 py-3 text-gray-400 text-xs dark:text-gray-500">
                         {formatDistanceToNow(new Date(ticket.updated_at), { locale: ptBR, addSuffix: true })}
                       </td>
                     </tr>
                   ))}
                   {!tickets.length && (
                     <tr>
-                      <td colSpan={7} className="px-4 py-12 text-center text-gray-400">
+                      <td colSpan={7} className="px-4 py-12 text-center text-gray-400 dark:text-gray-500">
                         Nenhum ticket encontrado.
                       </td>
                     </tr>
@@ -193,8 +193,8 @@ export function TicketList() {
             </div>
 
             {totalPages > 1 && (
-              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-                <p className="text-sm text-gray-500">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-800">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Página {currentPage} de {totalPages}
                 </p>
                 <div className="flex gap-2">
