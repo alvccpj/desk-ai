@@ -6,13 +6,13 @@ Sistema de gerenciamento de tickets de suporte com integração ao **Google Gemi
 
 ## Tecnologias
 
-| Camada   | Stack                                           |
-|----------|-------------------------------------------------|
-| Backend  | Python 3.11+, Django 4.2, Django REST Framework |
-| Auth     | JWT (SimpleJWT)                                 |
-| IA       | Google Gemini 1.5 Flash                         |
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS        |
-| Banco    | SQLite (desenvolvimento)                        |
+| Camada   | Stack |
+|----------|-------|
+| Backend  | Python 3.12+ (recomendado para Django 6), **Django 6.x**, **Django REST Framework 3.14+**, django-cors-headers 4.3+, Pillow 10.2+ |
+| Auth     | JWT (**djangorestframework-simplejwt** 5.3+) |
+| IA       | **Google Gemini** via `google-generativeai` (modelo configurável na API) |
+| Frontend | **React 19**, **TypeScript ~5.9**, **Vite 8**, **Tailwind CSS 3.4**, **TanStack Query 5**, React Router 7, Axios, date-fns 4, Lucide React |
+| Banco    | SQLite (desenvolvimento) |
 
 ---
 

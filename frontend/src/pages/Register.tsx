@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Bot } from 'lucide-react'
+import { Bot, Eye, EyeOff } from 'lucide-react'
 import { authApi } from '../api/auth'
 import { useAuth } from '../contexts/AuthContext'
 import { Spinner } from '../components/Spinner'
@@ -10,6 +10,7 @@ export function Register() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -35,9 +36,7 @@ export function Register() {
       toast.success('Conta criada com sucesso!')
     } catch (err: any) {
       const data = err.response?.data
-      const msg = data
-        ? Object.values(data).flat().join(' ')
-        : 'Erro ao criar conta.'
+      const msg = data ? Object.values(data).flat().join(' ') : 'Erro ao criar conta.'
       toast.error(msg)
     } finally {
       setLoading(false)
@@ -45,18 +44,42 @@ export function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary-600 rounded-2xl mb-4">
-            <Bot size={28} className="text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900">Desk AI</h1>
-          <p className="text-gray-500 mt-1">Crie sua conta gratuita</p>
-        </div>
+    <div className="min-h-screen flex">
 
-        <div className="card p-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Cadastro</h2>
+      {/* Left panel — branding */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-900 flex-col justify-center items-center p-12 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white opacity-5" />
+        <div className="absolute top-1/3 -right-16 w-56 h-56 rounded-full bg-white opacity-5" />
+        <div className="absolute -bottom-12 left-1/3 w-48 h-48 rounded-full bg-white opacity-5" />
+
+        <div className="relative z-10 text-center max-w-sm">
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <Bot size={32} className="text-white" />
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-3">Crie sua conta</h2>
+          <p className="text-primary-100 text-sm leading-relaxed">
+            Junte-se ao Desk AI e tenha acesso a um sistema de suporte com inteligência artificial integrada.
+          </p>
+        </div>
+      </div>
+
+      {/* Right panel — form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 overflow-y-auto">
+        <div className="w-full max-w-md py-8">
+
+          {/* Mobile logo */}
+          <div className="flex items-center gap-3 mb-8 lg:hidden">
+            <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center">
+              <Bot size={22} className="text-white" />
+            </div>
+            <span className="text-gray-900 text-xl font-bold">Desk AI</span>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-gray-900">Criar conta</h1>
+            <p className="text-gray-500 text-sm mt-1">Preencha os dados abaixo para se cadastrar</p>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="label">Nome completo</label>
@@ -70,6 +93,7 @@ export function Register() {
                 autoFocus
               />
             </div>
+
             <div>
               <label className="label">E-mail</label>
               <input
@@ -81,31 +105,47 @@ export function Register() {
                 required
               />
             </div>
+
             <div>
-              <label className="label">Departamento (opcional)</label>
+              <label className="label">
+                Departamento
+                <span className="text-gray-400 font-normal ml-1">(opcional)</span>
+              </label>
               <input
                 type="text"
                 className="input"
-                placeholder="TI, Financeiro..."
+                placeholder="TI, Financeiro, RH..."
                 value={form.department}
                 onChange={set('department')}
               />
             </div>
+
             <div>
               <label className="label">Senha</label>
-              <input
-                type="password"
-                className="input"
-                placeholder="Mínimo 8 caracteres"
-                value={form.password}
-                onChange={set('password')}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className="input pr-10"
+                  placeholder="Mínimo 8 caracteres"
+                  value={form.password}
+                  onChange={set('password')}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
+
             <div>
               <label className="label">Confirmar senha</label>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 className="input"
                 placeholder="••••••••"
                 value={form.password2}
@@ -113,18 +153,25 @@ export function Register() {
                 required
               />
             </div>
-            <button type="submit" className="btn-primary w-full py-2.5 mt-2" disabled={loading}>
+
+            <button
+              type="submit"
+              className="btn-primary w-full py-3 text-base mt-2"
+              disabled={loading}
+            >
               {loading ? <Spinner className="w-4 h-4" /> : 'Criar conta'}
             </button>
           </form>
+
           <p className="text-center text-sm text-gray-500 mt-6">
             Já tem conta?{' '}
-            <Link to="/login" className="text-primary-600 font-medium hover:underline">
+            <Link to="/login" className="text-primary-600 font-semibold hover:underline">
               Entrar
             </Link>
           </p>
         </div>
       </div>
+
     </div>
   )
 }

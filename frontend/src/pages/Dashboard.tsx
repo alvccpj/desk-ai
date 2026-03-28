@@ -1,37 +1,49 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { Ticket, CheckCircle, Clock, AlertTriangle, TrendingUp, PlusCircle } from 'lucide-react'
+import {
+  Ticket,
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  PlusCircle,
+  ArrowRight,
+  Inbox,
+  Bot,
+} from 'lucide-react'
 import { ticketsApi } from '../api/tickets'
 import { useAuth } from '../contexts/AuthContext'
 import { StatusBadge } from '../components/StatusBadge'
 import { PriorityBadge } from '../components/PriorityBadge'
 import { Spinner } from '../components/Spinner'
+import { Avatar } from '../components/Avatar'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-function StatCard({
-  label,
-  value,
-  icon,
-  color,
-}: {
+interface StatCardProps {
   label: string
   value: number
   icon: React.ReactNode
-  color: string
-}) {
+  gradient: string
+  iconBg: string
+  to: string
+}
+
+function StatCard({ label, value, icon, gradient, iconBg, to }: StatCardProps) {
   return (
-    <div className="card p-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-500">{label}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
-        </div>
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${color}`}>
-          {icon}
-        </div>
+    <Link
+      to={to}
+      className={`relative overflow-hidden rounded-2xl p-6 text-white flex flex-col justify-between min-h-[130px] shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200 ${gradient}`}
+    >
+      <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${iconBg}`}>
+        {icon}
       </div>
-    </div>
+      <div>
+        <p className="text-3xl font-bold leading-none mb-1">{value}</p>
+        <p className="text-sm font-medium opacity-80">{label}</p>
+      </div>
+      <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full opacity-10 bg-white" />
+      <div className="absolute -right-2 top-2 w-16 h-16 rounded-full opacity-10 bg-white" />
+    </Link>
   )
 }
 
@@ -67,95 +79,145 @@ export function Dashboard() {
     )
   }
 
+  const recent = recentTickets?.data.results.slice(0, 6) ?? []
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
+
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Olá, {user?.name.split(' ')[0]} 👋
-          </h1>
-          <p className="text-gray-500 text-sm mt-0.5">
-            Aqui está um resumo dos seus tickets
-          </p>
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
+
+      {/* Hero banner */}
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary-600 via-primary-700 to-indigo-800 p-7 text-white shadow-lg">
+        <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Bot size={18} className="opacity-70" />
+              <span className="text-sm font-medium opacity-70">Desk AI</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold">
+              {greeting}, {user?.name.split(' ')[0]}!
+            </h1>
+            <p className="mt-1 text-sm opacity-75">
+              Aqui está o resumo do seu suporte hoje
+            </p>
+          </div>
+          <Link
+            to="/tickets/new"
+            className="flex items-center gap-2 bg-white text-primary-700 font-semibold text-sm px-5 py-2.5 rounded-xl hover:bg-primary-50 transition-colors shadow"
+          >
+            <PlusCircle size={16} />
+            Novo ticket
+          </Link>
         </div>
-        <Link to="/tickets/new" className="btn-primary">
-          <PlusCircle size={16} />
-          Novo ticket
-        </Link>
+
+        {/* decorative circles */}
+        <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white opacity-5" />
+        <div className="absolute top-4 right-24 w-20 h-20 rounded-full bg-white opacity-5" />
+        <div className="absolute -bottom-6 right-8 w-28 h-28 rounded-full bg-white opacity-5" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Tickets abertos"
           value={openTickets?.data.count ?? 0}
-          icon={<Ticket size={22} className="text-blue-600" />}
-          color="bg-blue-50"
+          icon={<Ticket size={22} className="text-white" />}
+          gradient="bg-gradient-to-br from-blue-500 to-blue-700"
+          iconBg="bg-white/20"
+          to="/tickets?status=open"
         />
         <StatCard
           label="Em andamento"
           value={inProgressTickets?.data.count ?? 0}
-          icon={<Clock size={22} className="text-yellow-600" />}
-          color="bg-yellow-50"
+          icon={<Clock size={22} className="text-white" />}
+          gradient="bg-gradient-to-br from-amber-400 to-orange-500"
+          iconBg="bg-white/20"
+          to="/tickets?status=in_progress"
         />
         <StatCard
           label="Resolvidos"
           value={resolvedTickets?.data.count ?? 0}
-          icon={<CheckCircle size={22} className="text-green-600" />}
-          color="bg-green-50"
+          icon={<CheckCircle size={22} className="text-white" />}
+          gradient="bg-gradient-to-br from-emerald-400 to-green-600"
+          iconBg="bg-white/20"
+          to="/tickets?status=resolved"
         />
         <StatCard
           label="Críticos"
           value={criticalTickets?.data.count ?? 0}
-          icon={<AlertTriangle size={22} className="text-red-600" />}
-          color="bg-red-50"
+          icon={<AlertTriangle size={22} className="text-white" />}
+          gradient="bg-gradient-to-br from-red-500 to-rose-700"
+          iconBg="bg-white/20"
+          to="/tickets?priority=critical"
         />
       </div>
 
-      <div className="card">
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-            <TrendingUp size={18} className="text-primary-600" />
-            Tickets recentes
-          </h2>
-          <Link to="/tickets" className="text-sm text-primary-600 hover:underline font-medium">
+      {/* Recent tickets */}
+      <div className="card overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="font-semibold text-gray-900 text-base">Tickets recentes</h2>
+          <Link
+            to="/tickets"
+            className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+          >
             Ver todos
+            <ArrowRight size={14} />
           </Link>
         </div>
-        <div className="divide-y divide-gray-100">
-          {recentTickets?.data.results.slice(0, 8).map((ticket) => (
-            <Link
-              key={ticket.id}
-              to={`/tickets/${ticket.id}`}
-              className="flex items-center gap-4 px-5 py-3.5 hover:bg-gray-50 transition-colors"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  #{ticket.id} – {ticket.title}
-                </p>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {ticket.category?.name ?? 'Sem categoria'} ·{' '}
-                  {formatDistanceToNow(new Date(ticket.created_at), {
-                    locale: ptBR,
-                    addSuffix: true,
-                  })}
-                </p>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <PriorityBadge priority={ticket.priority} />
-                <StatusBadge status={ticket.status} />
-              </div>
+
+        {recent.length === 0 ? (
+          <div className="py-16 flex flex-col items-center text-gray-400">
+            <Inbox size={40} className="mb-3 opacity-40" />
+            <p className="font-medium text-gray-500">Nenhum ticket ainda</p>
+            <p className="text-sm mt-1">Crie seu primeiro ticket para começar</p>
+            <Link to="/tickets/new" className="btn-primary mt-4 text-sm">
+              <PlusCircle size={15} />
+              Criar ticket
             </Link>
-          ))}
-          {!recentTickets?.data.results.length && (
-            <div className="p-8 text-center text-gray-400">
-              <Ticket size={32} className="mx-auto mb-2 opacity-40" />
-              <p>Nenhum ticket ainda</p>
-              <Link to="/tickets/new" className="text-primary-600 hover:underline text-sm mt-1 inline-block">
-                Criar o primeiro ticket
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {recent.map((ticket) => (
+              <Link
+                key={ticket.id}
+                to={`/tickets/${ticket.id}`}
+                className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors group"
+              >
+                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 text-xs font-bold">
+                  #{ticket.id}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-primary-600 transition-colors">
+                    {ticket.title}
+                  </p>
+                  <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-400">
+                    <span>{ticket.category?.name ?? 'Sem categoria'}</span>
+                    <span>·</span>
+                    <span>
+                      {formatDistanceToNow(new Date(ticket.updated_at), {
+                        locale: ptBR,
+                        addSuffix: true,
+                      })}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <PriorityBadge priority={ticket.priority} />
+                  <StatusBadge status={ticket.status} />
+                  {ticket.assigned_to && (
+                    <Avatar
+                      name={ticket.assigned_to.name}
+                      src={ticket.assigned_to.avatar}
+                      size="sm"
+                    />
+                  )}
+                </div>
               </Link>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
