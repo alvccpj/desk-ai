@@ -2,6 +2,8 @@
 
 Sistema de gerenciamento de tickets de suporte com integração ao **Google Gemini AI**.
 
+Este repositório é um **projeto acadêmico** da disciplina **Códigos de Alta Performance Web** (UNINASSAU).
+
 ---
 
 ## Tecnologias
@@ -90,3 +92,7 @@ desk-ai/
         ├── App.tsx
         └── main.tsx
 ```
+
+---
+
+Obrigado por dar uma olhada no projeto. Se algo não ficar claro ou você quiser sugerir melhorias, fique à vontade para abrir uma issue ou contribuir — bom estudo e bom código.
