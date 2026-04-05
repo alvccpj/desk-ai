@@ -1,0 +1,34 @@
+# Blueprint Render: Postgres + API Django (pasta backend).
+# Dashboard → New → Blueprint → conecte o repo e aplique.
+# Depois configure no painel: CORS_ALLOWED_ORIGINS (URL do Vercel), CSRF_TRUSTED_ORIGINS (https://<seu-serviço>.onrender.com), opcional GEMINI_API_KEY.
+
+databases:
+  - name: desk-ai-db
+    plan: free
+    databaseName: desk_ai
+
+services:
+  - type: web
+    name: desk-ai-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: desk-ai-db
+          property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
