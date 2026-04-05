@@ -12,9 +12,9 @@ services:
     name: desk-ai-api
     runtime: python
     plan: free
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
-    startCommand: gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
+    # Sem rootDir: o build usa a raiz do repo; comandos entram em backend/ (evita erro "requirements.txt not found").
+    buildCommand: pip install -r requirements.txt && cd backend && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: cd backend && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.0"
