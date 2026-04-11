@@ -6,6 +6,36 @@ Este repositório é um **projeto acadêmico** da disciplina **Códigos de Alta 
 
 ---
 
+## Como o projeto funciona
+
+O Desk AI é um **help desk** em duas camadas:
+
+1. **Frontend (React + Vite)** — interface web: login (JWT), dashboard, tickets, comentários, perfis (cliente, agente, administrador) e telas administrativas conforme permissão.
+2. **Backend (Django REST)** — API em `/api/...`: autenticação, regras de negócio e persistência. O navegador **não** acessa o banco diretamente; todas as operações passam pela API.
+
+Fluxo típico: o **cliente** abre e acompanha chamados; **agentes** tratam tickets e comentários (incluindo notas internas); o **admin** gerencia usuários e categorias. A integração com **Google Gemini** é opcional: sem `GEMINI_API_KEY`, o restante do sistema segue funcionando.
+
+Para inspecionar dados no desenvolvimento local, use o **Django Admin** em `http://localhost:8000/admin` (com usuário staff/superuser).
+
+---
+
+## Hospedagem
+
+| Parte      | Plataforma | Observação |
+|------------|------------|------------|
+| **Backend** | [**Render**](https://render.com) | Serviço web Python (Gunicorn), API Django exposta em URL pública. Banco **PostgreSQL** no Render via `DATABASE_URL`. |
+| **Frontend** | [**Vercel**](https://vercel.com) | Build estático do Vite; variável **`VITE_API_URL`** deve apontar para a URL base da API no Render (sem depender de `localhost`). |
+
+No Django, configure **`CORS_ALLOWED_ORIGINS`** e **`CSRF_TRUSTED_ORIGINS`** com o domínio do app no Vercel e o da API no Render, conforme `backend/.env.example`. O arquivo **`render.yaml`** na raiz descreve um blueprint exemplo (API + Postgres).
+
+---
+
+## Ambiente local
+
+Instruções para subir API e interface no dia a dia, login de exemplo e acesso ao admin: veja **[COMO-RODAR.md](./COMO-RODAR.md)**.
+
+---
+
 ## Tecnologias
 
 | Camada   | Stack |
@@ -14,7 +44,7 @@ Este repositório é um **projeto acadêmico** da disciplina **Códigos de Alta 
 | Auth     | JWT (**djangorestframework-simplejwt** 5.3+) |
 | IA       | **Google Gemini** via `google-generativeai` (modelo configurável na API) |
 | Frontend | **React 19**, **TypeScript ~5.9**, **Vite 8**, **Tailwind CSS 3.4**, **TanStack Query 5**, React Router 7, Axios, date-fns 4, Lucide React |
-| Banco    | SQLite (desenvolvimento) |
+| Banco    | **SQLite** (desenvolvimento local); **PostgreSQL** no Render quando `DATABASE_URL` está definida |
 
 ---
 

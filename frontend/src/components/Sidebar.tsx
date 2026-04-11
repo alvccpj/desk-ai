@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
   Ticket,
@@ -28,8 +28,15 @@ const navItems: NavItem[] = [
   { to: '/admin/categories', label: 'Categorias', icon: <Tag size={18} />, roles: ['admin', 'agent'] },
 ]
 
+function isTicketsNavActive(pathname: string) {
+  if (pathname === '/tickets') return true
+  if (pathname === '/tickets/new') return false
+  return /^\/tickets\/[^/]+$/.test(pathname)
+}
+
 export function Sidebar() {
   const { user, logout } = useAuth()
+  const { pathname } = useLocation()
 
   const visible = navItems.filter(
     (item) => !item.roles || (user && item.roles.includes(user.role)),
@@ -54,13 +61,14 @@ export function Sidebar() {
           <NavLink
             key={item.to}
             to={item.to}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                isActive
+            className={({ isActive }) => {
+              const active = item.to === '/tickets' ? isTicketsNavActive(pathname) : isActive
+              return `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                active
                   ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/35 dark:text-primary-300'
                   : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'
               }`
-            }
+            }}
           >
             {item.icon}
             {item.label}
