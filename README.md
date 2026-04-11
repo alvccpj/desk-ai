@@ -1,21 +1,15 @@
 # Desk AI – Sistema de Help Desk com Inteligência Artificial
 
-Sistema de gerenciamento de tickets de suporte com integração ao **Google Gemini AI**.
-
-Este repositório é um **projeto acadêmico** da disciplina **Códigos de Alta Performance Web** (UNINASSAU).
+**Projeto acadêmico** (UNINASSAU — Códigos de Alta Performance Web): help desk com front **React (Vite)** e API **Django REST**; autenticação **JWT**. Opcionalmente **Google Gemini** — detalhes na seção [Funcionalidades de IA](#funcionalidades-de-ia-google-gemini).
 
 ---
 
 ## Como o projeto funciona
 
-O Desk AI é um **help desk** em duas camadas:
+1. **Frontend** — login, dashboard, tickets, comentários e telas conforme o **perfil** do usuário (tabela **Perfis de usuário** mais abaixo).
+2. **Backend** — expõe `/api/...`; o navegador **não** acessa o arquivo do banco diretamente.
 
-1. **Frontend (React + Vite)** — interface web: login (JWT), dashboard, tickets, comentários, perfis (cliente, agente, administrador) e telas administrativas conforme permissão.
-2. **Backend (Django REST)** — API em `/api/...`: autenticação, regras de negócio e persistência. O navegador **não** acessa o banco diretamente; todas as operações passam pela API.
-
-Fluxo típico: o **cliente** abre e acompanha chamados; **agentes** tratam tickets e comentários (incluindo notas internas); o **admin** gerencia usuários e categorias. A integração com **Google Gemini** é opcional: sem `GEMINI_API_KEY`, o restante do sistema segue funcionando.
-
-Para inspecionar dados no desenvolvimento local, use o **Django Admin** em `http://localhost:8000/admin` (com usuário staff/superuser).
+Para **rodar localmente**, credenciais de exemplo e **Django Admin** (dados no browser em desenvolvimento): **[COMO-RODAR.md](./COMO-RODAR.md)**.
 
 ---
 
@@ -27,12 +21,6 @@ Para inspecionar dados no desenvolvimento local, use o **Django Admin** em `http
 | **Frontend** | [**Vercel**](https://vercel.com) | Build estático do Vite; variável **`VITE_API_URL`** deve apontar para a URL base da API no Render (sem depender de `localhost`). |
 
 No Django, configure **`CORS_ALLOWED_ORIGINS`** e **`CSRF_TRUSTED_ORIGINS`** com o domínio do app no Vercel e o da API no Render, conforme `backend/.env.example`. O arquivo **`render.yaml`** na raiz descreve um blueprint exemplo (API + Postgres).
-
----
-
-## Ambiente local
-
-Instruções para subir API e interface no dia a dia, login de exemplo e acesso ao admin: veja **[COMO-RODAR.md](./COMO-RODAR.md)**.
 
 ---
 
@@ -60,7 +48,7 @@ Instruções para subir API e interface no dia a dia, login de exemplo e acesso 
 
 ## Funcionalidades de IA (Google Gemini)
 
-As funcionalidades de IA são **opcionais**. Sem a `GEMINI_API_KEY` o sistema funciona normalmente, apenas sem os recursos de IA.
+Exigem `GEMINI_API_KEY` no `.env` do backend; sem a chave, o resto do sistema funciona, só sem estes recursos:
 
 | Funcionalidade           | Descrição                                               |
 |--------------------------|---------------------------------------------------------|
