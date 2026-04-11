@@ -146,6 +146,14 @@ export function CreateTicket() {
               <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">
                 Clique em <Wand2 size={10} className="inline" /> para sugerir via IA
               </p>
+              {categoriesData &&
+                Array.isArray(categoriesData.data) &&
+                categoriesData.data.length === 0 && (
+                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                    Nenhuma categoria no sistema. No backend, execute{' '}
+                    <code className="rounded bg-gray-100 px-1 dark:bg-gray-800">python manage.py migrate</code>.
+                  </p>
+                )}
             </div>
 
             <div>

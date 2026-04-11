@@ -73,6 +73,31 @@ export function Login() {
               </li>
             ))}
           </ul>
+
+          <div className="rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
+            <p className="text-primary-200 text-xs font-medium mb-2">Acesso de demonstração (após setup)</p>
+            <table className="w-full text-left text-xs text-primary-100">
+              <thead>
+                <tr className="border-b border-white/15 text-primary-300">
+                  <th className="pb-2 pr-2 font-medium">Perfil</th>
+                  <th className="pb-2 pr-2 font-medium">E-mail</th>
+                  <th className="pb-2 font-medium">Senha</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="py-1.5 pr-2 align-top">Admin</td>
+                  <td className="py-1.5 pr-2 align-top break-all">admin@desk.ai</td>
+                  <td className="py-1.5 align-top">admin123</td>
+                </tr>
+                <tr>
+                  <td className="py-1.5 pr-2 align-top">Agente</td>
+                  <td className="py-1.5 pr-2 align-top break-all">agente@desk.ai</td>
+                  <td className="py-1.5 align-top">agente123</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <p className="relative z-10 text-primary-300 text-xs">
@@ -144,6 +169,35 @@ export function Login() {
               {loading ? <Spinner className="w-4 h-4" /> : 'Entrar'}
             </button>
           </form>
+
+          <div className="mt-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+              Acesso de demonstração <span className="font-normal">(após setup)</span>
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[280px] text-left text-xs text-gray-700 dark:text-gray-300">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-600">
+                    <th className="pb-2 pr-2 font-semibold text-gray-900 dark:text-white">Perfil</th>
+                    <th className="pb-2 pr-2 font-semibold text-gray-900 dark:text-white">E-mail</th>
+                    <th className="pb-2 font-semibold text-gray-900 dark:text-white">Senha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="py-2 pr-2 align-top">Admin</td>
+                    <td className="py-2 pr-2 align-top break-all">admin@desk.ai</td>
+                    <td className="py-2 align-top font-mono">admin123</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 pr-2 align-top">Agente</td>
+                    <td className="py-2 pr-2 align-top break-all">agente@desk.ai</td>
+                    <td className="py-2 align-top font-mono">agente123</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           <p className="text-center text-sm text-gray-500 mt-6 dark:text-gray-400">
             Não tem conta?{' '}
