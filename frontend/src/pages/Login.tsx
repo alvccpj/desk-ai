@@ -6,6 +6,12 @@ import { Spinner } from '../components/Spinner'
 import { ThemeToggle } from '../components/ThemeToggle'
 import toast from 'react-hot-toast'
 
+/** Senha de demonstração do admin (igual ao setup.ps1) */
+const DEMO_ADMIN_PASSWORD = ';uyi:^I139\u00A35'
+
+/** Senha de demonstração do agente (igual ao setup.ps1); termina com \ */
+const DEMO_AGENT_PASSWORD = 'bA.3m-231FN\\'
+
 const features = [
   { icon: <Ticket size={18} />, text: 'Gerencie tickets de suporte com facilidade' },
   { icon: <Zap size={18} />, text: 'Sugestões inteligentes com Google Gemini AI' },
@@ -88,12 +94,12 @@ export function Login() {
                 <tr>
                   <td className="py-1.5 pr-2 align-top">Admin</td>
                   <td className="py-1.5 pr-2 align-top break-all">admin@desk.ai</td>
-                  <td className="py-1.5 align-top">admin123</td>
+                  <td className="py-1.5 align-top font-mono break-all">{DEMO_ADMIN_PASSWORD}</td>
                 </tr>
                 <tr>
                   <td className="py-1.5 pr-2 align-top">Agente</td>
                   <td className="py-1.5 pr-2 align-top break-all">agente@desk.ai</td>
-                  <td className="py-1.5 align-top">agente123</td>
+                  <td className="py-1.5 align-top font-mono break-all">{DEMO_AGENT_PASSWORD}</td>
                 </tr>
               </tbody>
             </table>
@@ -187,12 +193,12 @@ export function Login() {
                   <tr>
                     <td className="py-2 pr-2 align-top">Admin</td>
                     <td className="py-2 pr-2 align-top break-all">admin@desk.ai</td>
-                    <td className="py-2 align-top font-mono">admin123</td>
+                    <td className="py-2 align-top font-mono break-all">{DEMO_ADMIN_PASSWORD}</td>
                   </tr>
                   <tr>
                     <td className="py-2 pr-2 align-top">Agente</td>
                     <td className="py-2 pr-2 align-top break-all">agente@desk.ai</td>
-                    <td className="py-2 align-top font-mono">agente123</td>
+                    <td className="py-2 align-top font-mono break-all">{DEMO_AGENT_PASSWORD}</td>
                   </tr>
                 </tbody>
               </table>

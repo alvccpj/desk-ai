@@ -19,10 +19,12 @@ npm run dev
 
 ## Login de exemplo (após `setup.ps1`)
 
-| Perfil   | E-mail           | Senha      |
-|----------|------------------|------------|
-| Admin    | admin@desk.ai    | admin123   |
-| Agente   | agente@desk.ai   | agente123  |
+| Perfil   | E-mail           | Senha              |
+|----------|------------------|--------------------|
+| Admin    | admin@desk.ai    | `;uyi:^I139£5`     |
+| Agente   | agente@desk.ai   | `bA.3m-231FN\`     |
+
+Volta a correr o **`setup.ps1`** se precisares de repor estas senhas no banco (por exemplo após mudanças manuais ou contas já criadas).
 
 ---
 

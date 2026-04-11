@@ -19,15 +19,36 @@ python manage.py shell -c "
 from apps.users.models import User
 from apps.tickets.models import Category, Ticket
 
-if not User.objects.filter(email='admin@desk.ai').exists():
-    User.objects.create_superuser(email='admin@desk.ai', username='admin', password='admin123', name='Administrador', role='admin')
-    print('Admin criado: admin@desk.ai / admin123')
+ADMIN_PW = ';uyi:^I139' + chr(163) + '5'
+AGENT_PW = 'bA.3m-231FN' + chr(92)
 
-if not User.objects.filter(email='agente@desk.ai').exists():
-    u = User(email='agente@desk.ai', username='agente', name='Agente Teste', role='agent', department='Suporte')
-    u.set_password('agente123')
-    u.save()
-    print('Agente criado: agente@desk.ai / agente123')
+if not User.objects.filter(email='admin@desk.ai').exists():
+    User.objects.create_superuser(email='admin@desk.ai', username='admin', password=ADMIN_PW, name='Administrador', role='admin')
+    print('Admin criado: admin@desk.ai / ' + ADMIN_PW)
+else:
+    a = User.objects.get(email='admin@desk.ai')
+    a.is_staff = True
+    a.is_superuser = True
+    a.role = 'admin'
+    a.set_password(ADMIN_PW)
+    a.save()
+    print('Admin atualizado: admin@desk.ai / ' + ADMIN_PW)
+
+u, created = User.objects.update_or_create(
+    email='agente@desk.ai',
+    defaults={
+        'username': 'agente',
+        'name': 'Agente Teste',
+        'role': 'agent',
+        'department': 'Suporte',
+        'is_staff': False,
+        'is_superuser': False,
+        'is_active': True,
+    },
+)
+u.set_password(AGENT_PW)
+u.save()
+print(('Agente criado' if created else 'Agente atualizado') + ': agente@desk.ai / ' + AGENT_PW)
 
 cats = ['Infraestrutura', 'Software', 'Hardware', 'Acesso e Permissoes', 'Financeiro', 'RH']
 for c in cats:
@@ -47,5 +68,5 @@ Write-Host "`n=== Setup concluido! ===" -ForegroundColor Green
 Write-Host "Para iniciar:" -ForegroundColor Cyan
 Write-Host "  Backend:  cd backend; .\venv\Scripts\Activate.ps1; python manage.py runserver" -ForegroundColor White
 Write-Host "  Frontend: cd frontend; npm run dev" -ForegroundColor White
-Write-Host "`nAdmin: http://localhost:8000/admin  (admin@desk.ai / admin123)" -ForegroundColor Yellow
+Write-Host "`nAdmin: http://localhost:8000/admin  (admin@desk.ai / ver senha no COMO-RODAR.md ou Login)" -ForegroundColor Yellow
 Write-Host "App:   http://localhost:5173" -ForegroundColor Yellow
