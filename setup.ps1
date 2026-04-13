@@ -15,46 +15,7 @@ Write-Host "[3/5] Rodando migracoes..." -ForegroundColor Yellow
 python manage.py migrate
 
 Write-Host "[4/5] Criando dados de exemplo..." -ForegroundColor Yellow
-python manage.py shell -c "
-from apps.users.models import User
-from apps.tickets.models import Category, Ticket
-
-ADMIN_PW = ';uyi:^I139' + chr(163) + '5'
-AGENT_PW = 'bA.3m-231FN' + chr(92)
-
-if not User.objects.filter(email='admin@desk.ai').exists():
-    User.objects.create_superuser(email='admin@desk.ai', username='admin', password=ADMIN_PW, name='Administrador', role='admin')
-    print('Admin criado: admin@desk.ai / ' + ADMIN_PW)
-else:
-    a = User.objects.get(email='admin@desk.ai')
-    a.is_staff = True
-    a.is_superuser = True
-    a.role = 'admin'
-    a.set_password(ADMIN_PW)
-    a.save()
-    print('Admin atualizado: admin@desk.ai / ' + ADMIN_PW)
-
-u, created = User.objects.update_or_create(
-    email='agente@desk.ai',
-    defaults={
-        'username': 'agente',
-        'name': 'Agente Teste',
-        'role': 'agent',
-        'department': 'Suporte',
-        'is_staff': False,
-        'is_superuser': False,
-        'is_active': True,
-    },
-)
-u.set_password(AGENT_PW)
-u.save()
-print(('Agente criado' if created else 'Agente atualizado') + ': agente@desk.ai / ' + AGENT_PW)
-
-cats = ['Infraestrutura', 'Software', 'Hardware', 'Acesso e Permissoes', 'Financeiro', 'RH']
-for c in cats:
-    Category.objects.get_or_create(name=c)
-print(f'{len(cats)} categorias criadas')
-"
+python seed_demo_data.py
 
 Set-Location ..
 
