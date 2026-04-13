@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { Wand2, PlusCircle, ArrowLeft } from 'lucide-react'
 import { ticketsApi, type TicketPriority } from '../api/tickets'
 import { Spinner } from '../components/Spinner'
@@ -38,26 +39,49 @@ export function CreateTicket() {
     onError: () => toast.error('Erro ao criar ticket.'),
   })
 
+  const titleOk = form.title.trim().length > 0
+  const descriptionOk = form.description.trim().length > 0
+  const canSuggestCategory = titleOk && descriptionOk
+
   const handleAutoCategorize = async () => {
-    if (!form.title || !form.description) {
-      toast.error('Preencha título e descrição primeiro.')
+    if (!canSuggestCategory) {
+      toast.error('Preencha título e descrição antes de usar a IA.')
       return
     }
     setCategorizing(true)
     try {
-      const res = await ticketsApi.autoCategorize(form.title, form.description)
-      const suggested = res.data.category
-      const match = categoriesData?.data.find(
-        (c) => c.name.toLowerCase() === suggested.toLowerCase(),
+      const res = await ticketsApi.autoCategorize(
+        form.title.trim(),
+        form.description.trim(),
       )
+      const suggested = (res.data.category || '').trim()
+      if (!suggested) {
+        toast.error(
+          'A API devolveu categoria vazia. Confirme GEMINI_API_KEY em backend/.env, rode pip install -r requirements.txt e reinicie o runserver.',
+        )
+        return
+      }
+      const list = Array.isArray(categoriesData?.data) ? categoriesData.data : []
+      const sn = suggested.toLowerCase()
+      const match =
+        list.find((c) => c.name.toLowerCase() === sn) ||
+        list.find((c) => sn.includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(sn))
       if (match) {
         setForm((f) => ({ ...f, category_id: match.id }))
         toast.success(`Categoria sugerida: ${match.name}`)
       } else {
-        toast('Nenhuma categoria encontrada para este ticket.')
+        toast(
+          `A IA sugeriu "${suggested}", mas não coincide com nenhuma categoria cadastrada.`,
+        )
       }
-    } catch {
-      toast.error('IA não disponível.')
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 503) {
+        toast.error('IA indisponível (ex.: sem chave Gemini no servidor).')
+      } else if (isAxiosError(err) && err.response?.status === 403) {
+        toast.error('Sem permissão para usar esta função.')
+      } else {
+        toast.error('Não foi possível obter a sugestão. Tente de novo.')
+      }
     } finally {
       setCategorizing(false)
     }
@@ -135,16 +159,22 @@ export function CreateTicket() {
                 </select>
                 <button
                   type="button"
-                  className="btn-secondary px-3"
-                  title="Sugerir categoria via IA"
+                  className="btn-secondary px-3 disabled:opacity-50"
+                  title={
+                    canSuggestCategory
+                      ? 'Sugerir categoria via IA'
+                      : 'Preencha título e descrição primeiro'
+                  }
                   onClick={handleAutoCategorize}
-                  disabled={categorizing}
+                  disabled={categorizing || !canSuggestCategory}
                 >
                   {categorizing ? <Spinner className="w-4 h-4" /> : <Wand2 size={16} />}
                 </button>
               </div>
               <p className="text-xs text-gray-400 mt-1 dark:text-gray-500">
-                Clique em <Wand2 size={10} className="inline" /> para sugerir via IA
+                Preencha <strong className="font-medium text-gray-500 dark:text-gray-400">título</strong> e{' '}
+                <strong className="font-medium text-gray-500 dark:text-gray-400">descrição</strong>; depois use{' '}
+                <Wand2 size={10} className="inline" /> para sugerir a categoria (requer Gemini no servidor).
               </p>
               {categoriesData &&
                 Array.isArray(categoriesData.data) &&

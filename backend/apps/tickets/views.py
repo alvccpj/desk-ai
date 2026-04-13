@@ -120,7 +120,7 @@ class TicketViewSet(viewsets.ModelViewSet):
             status=status.HTTP_503_SERVICE_UNAVAILABLE,
         )
 
-    @action(detail=False, methods=['post'], permission_classes=[IsAdminOrAgent])
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def auto_categorize(self, request):
         title = request.data.get('title', '')
         description = request.data.get('description', '')

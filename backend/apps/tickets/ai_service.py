@@ -6,14 +6,40 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
+def _clean_category_label(text: str) -> str:
+    """O modelo por vezes devolve aspas, markdown ou uma frase; extraímos o nome útil."""
+    if not text:
+        return ''
+    t = text.strip().strip('`"\'*').split('\n')[0].strip()
+    for prefix in ('categoria:', 'category:', 'resposta:', '- '):
+        low = t.lower()
+        if low.startswith(prefix):
+            t = t[len(prefix):].strip()
+            break
+    return t.strip('`"\'*')
+
+
+def _response_text(response) -> str:
+    """Evita falha silenciosa: .text pode levantar ValueError (bloqueio / sem candidatos)."""
+    try:
+        text = response.text
+        return (text or '').strip()
+    except ValueError as exc:
+        fb = getattr(response, 'prompt_feedback', None)
+        logger.warning('Gemini sem texto utilizável: %s | prompt_feedback=%s', exc, fb)
+        return ''
+
+
 def get_gemini_client():
     try:
         import google.generativeai as genai
+
         api_key = settings.GEMINI_API_KEY
         if not api_key:
             return None
         genai.configure(api_key=api_key)
-        return genai.GenerativeModel('gemini-1.5-flash')
+        model_id = getattr(settings, 'GEMINI_MODEL', None) or 'gemini-2.5-flash'
+        return genai.GenerativeModel(model_id)
     except Exception as exc:
         logger.warning('Gemini não disponível: %s', exc)
         return None
@@ -51,7 +77,7 @@ Responda em português do Brasil, de forma profissional mas acessível."""
 
     try:
         response = model.generate_content(prompt)
-        return response.text.strip()
+        return _response_text(response)
     except Exception as exc:
         logger.error('Erro ao chamar Gemini: %s', exc)
         return ''
@@ -60,7 +86,11 @@ Responda em português do Brasil, de forma profissional mas acessível."""
 def auto_categorize_ticket(title: str, description: str, categories: list) -> str:
     """Sugere a melhor categoria para um ticket."""
     model = get_gemini_client()
-    if model is None or not categories:
+    if model is None:
+        logger.warning('auto_categorize: sem cliente Gemini (defina GEMINI_API_KEY em backend/.env)')
+        return ''
+    if not categories:
+        logger.warning('auto_categorize: nenhuma categoria na base — rode migrate/seed_demo_data')
         return ''
 
     cat_list = '\n'.join(f'- {c["name"]}: {c.get("description", "")}' for c in categories)
@@ -77,7 +107,16 @@ Responda APENAS com o nome exato da categoria escolhida, sem explicações adici
 
     try:
         response = model.generate_content(prompt)
-        return response.text.strip()
+        raw = _response_text(response)
+        cleaned = _clean_category_label(raw)
+        if not cleaned and raw:
+            logger.warning('Gemini devolveu texto não reconhecido como categoria: %r', raw[:200])
+        if not cleaned and not raw:
+            logger.warning(
+                'auto_categorize: resposta vazia (verifique GEMINI_API_KEY, quota e GEMINI_MODEL=%s)',
+                getattr(settings, 'GEMINI_MODEL', ''),
+            )
+        return cleaned
     except Exception as exc:
         logger.error('Erro ao chamar Gemini: %s', exc)
         return ''
@@ -111,7 +150,7 @@ Responda em português, em no máximo 5 linhas."""
 
     try:
         response = model.generate_content(prompt)
-        return response.text.strip()
+        return _response_text(response)
     except Exception as exc:
         logger.error('Erro ao chamar Gemini: %s', exc)
         return ''

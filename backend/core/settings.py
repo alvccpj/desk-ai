@@ -3,9 +3,10 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Carregar sempre backend/.env (não depende do diretório onde corriste manage.py/runserver).
+load_dotenv(BASE_DIR / '.env')
+load_dotenv(BASE_DIR.parent / '.env')
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-in-production')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
@@ -130,7 +131,9 @@ if _csrf:
 else:
     CSRF_TRUSTED_ORIGINS = []
 
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '').strip()
+# Modelo estável atual (Google AI Studio); override com GEMINI_MODEL se necessário.
+GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash').strip()
 
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Recife'
