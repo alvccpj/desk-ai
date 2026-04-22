@@ -9,18 +9,7 @@
 1. **Frontend** — login, dashboard, tickets, comentários e telas conforme o **perfil** do usuário (tabela **Perfis de usuário** mais abaixo).
 2. **Backend** — expõe `/api/...`; o navegador **não** acessa o arquivo do banco diretamente.
 
-Para **rodar localmente**, credenciais de exemplo e **Django Admin** (dados no browser em desenvolvimento): **[COMO-RODAR.md](./COMO-RODAR.md)**.
-
----
-
-## Hospedagem
-
-| Parte      | Plataforma | Observação |
-|------------|------------|------------|
-| **Backend** | [**Render**](https://render.com) | Serviço web Python (Gunicorn), API Django exposta em URL pública. Banco **PostgreSQL** no Render via `DATABASE_URL`. |
-| **Frontend** | [**Vercel**](https://vercel.com) | Build estático do Vite; variável **`VITE_API_URL`** deve apontar para a URL base da API no Render (sem depender de `localhost`). |
-
-No Django, configure **`CORS_ALLOWED_ORIGINS`** e **`CSRF_TRUSTED_ORIGINS`** com o domínio do app no Vercel e o da API no Render, conforme `backend/.env.example`. O arquivo **`render.yaml`** na raiz descreve um blueprint exemplo (API + Postgres).
+O fluxo previsto é **execução local** (API em `runserver`, front com Vite). Passo a passo, credenciais de exemplo e **Django Admin**: **[COMO-RODAR.md](./COMO-RODAR.md)**. O front usa `VITE_API_URL` (ver `frontend/.env.example`); em desenvolvimento o padrão aponta para `http://localhost:8000`.
 
 ---
 
@@ -32,7 +21,7 @@ No Django, configure **`CORS_ALLOWED_ORIGINS`** e **`CSRF_TRUSTED_ORIGINS`** com
 | Auth     | JWT (**djangorestframework-simplejwt** 5.3+) |
 | IA       | **Google Gemini** via `google-generativeai` (modelo configurável na API) |
 | Frontend | **React 19**, **TypeScript ~5.9**, **Vite 8**, **Tailwind CSS 3.4**, **TanStack Query 5**, React Router 7, Axios, date-fns 4, Lucide React |
-| Banco    | **SQLite** (desenvolvimento local); **PostgreSQL** no Render quando `DATABASE_URL` está definida |
+| Banco    | **SQLite** por omissão; **PostgreSQL** opcional se `DATABASE_URL` estiver definida (ver `backend/.env.example`) |
 
 ---
 
