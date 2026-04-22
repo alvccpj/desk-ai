@@ -106,7 +106,10 @@ export const ticketsApi = {
     api.get<{ summary: string }>(`/api/tickets/${id}/summarize/`),
 
   autoCategorize: (title: string, description: string) =>
-    api.post<{ category: string }>('/api/tickets/auto_categorize/', { title, description }),
+    api.post<{ category: string; detail?: string }>('/api/tickets/auto_categorize/', {
+      title,
+      description,
+    }),
 
   uploadAttachment: (id: number, file: File) => {
     const fd = new FormData()

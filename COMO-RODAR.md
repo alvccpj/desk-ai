@@ -4,6 +4,21 @@
 
 **Antes:** instala o **Python** a partir de [python.org](https://www.python.org) e confirma no terminal com `python --version`. O `python` tem de estar no PATH; sem isso não dá para criar o `venv` nem instalar dependências. Para o segundo terminal (Vite), precisas também de **Node.js** com `npm` instalado.
 
+### Ficheiros `.env` (recomendado na primeira configuração)
+
+A API lê `backend/.env` (e o Vite o `frontend/.env`). O repositório traz ficheiros **exemplo** (`.env.example`); podes **copiar** para o nome final **uma vez**:
+
+```bash
+# Na raiz, na primeira vez
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+```
+
+- **`backend/.env`** — essencial: `SECRET_KEY`, `DEBUG`, e **`GEMINI_API_KEY`** para as funcionalidades de IA (categorização, sugestões, resumos). Sem chave, o resto do app funciona; a IA não. Gera a chave em [Google AI Studio](https://aistudio.google.com/apikey) e cola após `GEMINI_API_KEY=`; **reinicia o `runserver`** sempre que alterares o `.env`.
+- **`frontend/.env`** — define a URL base da API (`VITE_API_URL`); o exemplo aponta para `http://localhost:8000`.
+
+> Se já tiveres `backend/.env` com segredos, **não** voltes a fazer `cp` por cima — isso apagava a tua chave.
+
 O `source venv/Scripts/activate` só funciona depois de existir a pasta `backend/venv`. Na primeira vez, a partir da raiz do repositório:
 
 ```bash

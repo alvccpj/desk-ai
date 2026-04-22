@@ -57,7 +57,8 @@ export function CreateTicket() {
       const suggested = (res.data.category || '').trim()
       if (!suggested) {
         toast.error(
-          'A API devolveu categoria vazia. Confirme GEMINI_API_KEY em backend/.env, rode pip install -r requirements.txt e reinicie o runserver.',
+          res.data.detail ||
+            'Categoria vazia. Verifique GEMINI_API_KEY, dependências (pip) e reinicie o servidor.',
         )
         return
       }
@@ -75,8 +76,14 @@ export function CreateTicket() {
         )
       }
     } catch (err) {
+      const detail = isAxiosError(err) ? (err.response?.data as { detail?: string } | undefined)?.detail : undefined
       if (isAxiosError(err) && err.response?.status === 503) {
-        toast.error('IA indisponível (ex.: sem chave Gemini no servidor).')
+        toast.error(
+          detail ||
+            'IA indisponível. Crie backend/.env com GEMINI_API_KEY (aistudio.google.com) e reinicie o runserver.',
+        )
+      } else if (isAxiosError(err) && err.response?.status === 400) {
+        toast.error(detail || 'Não é possível categorizar: verifique as categorias do sistema.')
       } else if (isAxiosError(err) && err.response?.status === 403) {
         toast.error('Sem permissão para usar esta função.')
       } else {

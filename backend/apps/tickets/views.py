@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import permissions, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -122,10 +123,31 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def auto_categorize(self, request):
+        if not getattr(settings, 'GEMINI_API_KEY', None):
+            return Response(
+                {
+                    'detail': 'Defina GEMINI_API_KEY no ficheiro backend/.env (cópia de .env.example). Obtenha a chave em https://aistudio.google.com/apikey e reinicie o runserver.',
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
         title = request.data.get('title', '')
         description = request.data.get('description', '')
         categories = list(Category.objects.values('name', 'description'))
+        if not categories:
+            return Response(
+                {
+                    'detail': 'Não há categorias na base. Execute python seed_demo_data.py ou crie categorias no Django Admin.',
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         suggestion = auto_categorize_ticket(title, description, categories)
+        if not suggestion:
+            return Response(
+                {
+                    'detail': 'O Gemini não devolveu categoria. Verifique quota da chave, o modelo (GEMINI_MODEL) e os logs do servidor. Confirme também google-generativeai instalado (pip install -r requirements.txt).',
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
         return Response({'category': suggestion})
 
     @action(detail=True, methods=['post'])
